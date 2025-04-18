@@ -15,5 +15,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        show_sql: true
   application:
     name: jpa-study202504
