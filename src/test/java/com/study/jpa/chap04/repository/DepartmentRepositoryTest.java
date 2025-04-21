@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -40,7 +42,7 @@ class DepartmentRepositoryTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("양방향 연관관계에서 연관 데이터의 수정")
     void testChangeDept() {
         // 1번 사원의 부서를 1 -> 2번 부서로 변경해야 한다.
 
@@ -57,7 +59,7 @@ class DepartmentRepositoryTest {
         // update는 트랜잭션이 종료되어야 동작합니다.
         // 이 작업 단위(메서드) 안에서 부서에도 사원의 변경된 정보를 사용할 수 있도록
         // 연관관계 편의 메서드를 통해 리스트에 사원을 직접 추가해서 마치 변경사항이
-        // 바로 변경된 것처럼 사용이 가능.
+        // 바로 반영된 것처럼 사용이 가능.
         foundEmp.changeDepartment(department);
 
         // then
@@ -66,6 +68,43 @@ class DepartmentRepositoryTest {
         department.getEmployees().forEach(System.out::println);
         System.out.println("\n\n\n");
     }
+
+    @Test
+    @DisplayName("N+1 문제 발생 예시")
+    void testNPlusOneEx() {
+        // given
+        List<Department> departments = departmentRepository.findAll();
+
+        // when
+        departments.forEach(dept -> {
+            System.out.println("=========== 사원 리스트 ===========");
+            List<Employee> empList = dept.getEmployees();
+            System.out.println(empList);
+
+            System.out.println("\n\n");
+        });
+
+        // then
+    }
+
+    @Test
+    @DisplayName("N+1 문제 해결 예시")
+    void testNPlusOneSolution() {
+        // given
+        List<Department> departments = departmentRepository.findAllIncludesEmployees();
+
+        // when
+        departments.forEach(dept -> {
+            System.out.println("=========== 사원 리스트 ===========");
+            List<Employee> empList = dept.getEmployees();
+            System.out.println(empList);
+
+            System.out.println("\n\n");
+        });
+
+        // then
+    }
+
 
 }
 
