@@ -57,7 +57,7 @@ class EmployeeRepositoryTest {
     @DisplayName("특정 사원의 정보를 조회하면 그 사원의 부서 정보도 얻을 수 있을 것이다.")
     void testFindOne() {
         // given
-        Long id = 26L;
+        Long id = 2L;
 
         // when
         Employee employee
@@ -75,7 +75,7 @@ class EmployeeRepositoryTest {
     @DisplayName("부서 정보 조회")
     void testFindDept() {
         // given
-        Long id = 26L;
+        Long id = 1L;
 
         // when
         Department department
